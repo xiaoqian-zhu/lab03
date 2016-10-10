@@ -66,7 +66,7 @@ test_that("missing value", {
   expect_type(missing_value(w), 'double')
 })
 
-source("../functions/improved_range_value.R")
+source("../functions/improved-range-value.R")
 context("Test for improved range value function")
 test_that("improved range value", { 
   y <- c(1, 2, 3, 4, NA)
