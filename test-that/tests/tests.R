@@ -65,3 +65,12 @@ test_that("missing value", {
   expect_gte(missing_values(w), 0)
   expect_type(missing_value(w), 'double')
 })
+
+source("../functions/improved_range_value.R")
+context("Test for improved range value function")
+test_that("improved range value", { 
+  y <- c(1, 2, 3, 4, NA)
+  expect_gtel(improved_range_value(y),2)
+  expect_length(improved_range_value(y),1)
+  expect_type(improved_range_value(y),'double') 
+})
