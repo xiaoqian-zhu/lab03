@@ -1,0 +1,91 @@
+\documentclass{article}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+\title{Simple Regression Analysis}
+\author{Xiaoqian Zhu}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Abstract}
+
+In this report we reproduce the main results displayed in section 3.1 Simple Linear Regression (chapter 3) of the book An Introduction to Statistical Learning by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani. Here is the link to the book: http://www-bcf.usc.edu/~gareth/ISL/.
+
+
+
+\section{Introduction}
+
+The overall goal is to provide advice on how to improve sales of the particular product. More specificcaly, the idea is to determine whether there is an association between advertising on TV and sales, and if so, I am going to develop an accurate model that can be used to predict sales on the basis of TV advertising budget by applying a simple linear regression model on advertising data set, compiled by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani.
+
+
+\section{Data}
+
+In this homework, we are working with Advertising data set, which consists of Sales in thousands of units of a particular product in 200 different markets, along with advertising budgets (in thousands of dollars) for the product in each of those markets for three different media: TV, Radio, and Newspaper. In this homework, we are mainly working on the TV and sales to find out weather they have an association.
+
+\section{Methodology}
+
+We consider one media from the data set, TV, and the study its relationship with Sales. We start our analysis by setting up null and alternative hypothesis. The null hypothesis is, $H_{0}$, that there is no relationship between TV advertising budget and sales; the alternative hypothesis is, $H_{1}$, that there is a relationship between TV advertising budget and sales. These are equal to the following that $H_{0}: \beta_1 = 0$ and $H_{0}: \beta_1 \neq 0$. To test the hypothesis, we apply a simple linear regression model,  $Sales = \beta_0 + \beta_1 TV$ , on the data set, Advertising.csv, to get the estimates of $\beta_0$ and $\beta_1$, which are $\hat{\beta_0}$ and $\hat{\beta_1}$. In this homework, we will use the least squares model to our data for the regression analysis.
+
+
+
+\section{Results}
+
+Running regression through R, we can compute get the estimated coefficients. The regression coefficients is given in the table below:
+
+<<setup of tables, echo = FALSE>>=
+library(xtable)
+load('../data/regression.RData')
+library("xtable")
+@
+
+<<tables1, fig.width=4, fig.height=4, echo = FALSE, results= 'asis'>>=
+table1 <- xtable(regression_sum,caption = 'Information about Regression Coefficents',digits = 2)
+
+row.names(table1) <- c('(Intercept)','TV')
+
+print(table1, caption.placement = 'top',comment = getOption("xtable.comment", FALSE))
+@
+
+In table 1, we can see the estimated coefficients $\hat{\beta_0}$ and $\hat{\beta_1}$. The interception $\hat{\beta_0}$ is equal to 7.03 and the coefficient on TV $\hat{\beta_1}$ is 0.05, which means that for every additional \$1000 spent on TV adverstiing is associated to 50 additional units of the specific product sold. Morevoer, the t stat of both estimated coefficients are both very high, and the p value are both equal to 0. Thus, both estimated coefficients are statisitcally significant at the 1\% level, and we can confidentally reject the null hypothesis. To be noticed, the correlation does not necessarily equal to causation. So we need more inforamtion about the regression analysis to see how much this linear model explain the relationship. 
+
+More information about the least squares model from the regression analysis is given in the table below:
+
+
+<<tables, fig.width=4, fig.height=4, echo = FALSE, results= 'asis'>>=
+Quantity <- c('RSS', 'R2', 'F-stat')
+Value <- c(regression_sum$sigma, regression_sum$adj.r.squared, regression_sum$fstatistic[1])
+
+results2 <- data.frame(Quantity, Value)
+
+table2 <- xtable(results2, caption = 'Regression Quality Indices')
+
+print(table2, caption.placement = 'top', comment = getOption("xtable.comment", FALSE))
+@
+
+RSS is residual sum of squares and it measures the deviation from true regression. In table 2,  RSS is 3.26, that the actual amount of sales will deviate from the true regression by an average of 3260 units. $R^{2}$ tells us how much of the dependent variable can be explained by the independent variable. In table 2, $R^{2} = 0.61$, that 61\% of variability in sales can be explained by TV advertising budget. F-statistic also describes the statistically difference. In table 2, F-stat is equal to 312.14, which is very hight that we can confidently reject null hypothesis. F-statistic supports the same conclusion from the t-test in table 1. Thus, TV advertising budget and sales have a positive relationship. 
+
+I also include a picture of the scatterplot of the analysis with fitted regression line below:
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{scatterplot-tv-sales}
+\caption{\label{fig:Scatter}Scatterplot of TV and Sales.}
+\end{figure}
+
+From figure 1, we can clearly see a positive correlation between TV advertising budget and sales. 
+
+
+\section{Conclusion}
+
+In this homework, we are able to recreate the research of how TV advertising budget affects sales done by in the chapter 3 of chapter 3 of An Introduction of Statistical Learning, and derive the conclusion that for every additional \$1000 spent on TV adverstiing is correlated to 50 additional units of the specific product sold, by applying a simple linear regression model on the data set, `Adverstiting.csv`. The positive correlation can be easily proved by looking at the positive sloping regression line in Figure 1. The regression analysis gives us both positive and statisitically significant estimated coefficients and can reject the null hyphothesis that TV adversiting budget does not have a correlation with sales. The very high F-statistics also helps to support the same conclusion that TV advertising budget and sales do have a correlation. Additionally, $R^{2}$ tells us that 61\% of the variability in sales can be explained by this simple linear model, which is TV advertising budget. To be noticed, the correlation does not necessary means causation, it is possible that it is the increase in sales of one specific product lead to the increase in TV advertising budget.
+
+Additionally, this homework also teaches me how to write a scientific report in R. I used to run regression in STATA and copy and paste the tables and figures to Word to compile my work. In this homework, I learned to run codes directly in the report and also can use Makefile to automate my wrapping up process. This saves my lots of time and very cool!
+
+
+3-4 428
+\end{document}
